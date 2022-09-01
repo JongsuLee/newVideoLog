@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2" xmlns="http://xmlns.jcp.org/xml/ns/persistence" 
+		     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+    <persistence-unit name="VideoLog">
+    	<properties>
+    		<!-- property name attribute -->
+    		<!-- javax.persistence ~: JPA 표준 속성 -->
+    		<!-- hybernate ~ : 하이버네이트 전용 속성 -->
+    		
+    		<!-- 전용 속성 -->
+    		<!-- MySQL 설정 -->
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/videolog?serverTimezone=UTC"/>
+			<property name="javax.persistence.jdbc.user" value="root"/>
+			<property name="javax.persistence.jdbc.password" value="1234"/>
+
+    		      
+    		<!-- DB Dialect(방언) 설정 -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5Dialect" />
+    		
+    		<!-- 옵션 속성(optional) -->
+    		<!-- hibernate 실행 과정에서 Java Application 콘솔에 DDL, DML 등 SQL문 출력 -->
+    		<property name="hibernate.show_sql" value="true"/>
+    		<!-- SQL 출력 형태를 정렬 -->
+    		<property name="hibernate.format_sql" value="true"/>
+    		<!-- Java Application 실행 시 DB 테이블을 자동으로 생성할 것인지 -->
+    		<!-- value값으로 create라고 쓰면, 기존의 테이블이 존재할 경우 삭제 후 해당 테이블을 생성해줌: Drop + Create -->
+    		<!-- value값으로 update라고 쓰면, DB의 테이블과 Entity의 mapping 정보를 비교하고 변경된 사항만 수정, 테이블을 새로 생성하지 않음 -->
+    		<property name="hibernate.hbm2ddl.auto" value="update"/>
+    	</properties>
+    </persistence-unit>
+</persistence>
