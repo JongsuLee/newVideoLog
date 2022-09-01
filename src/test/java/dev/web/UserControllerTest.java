@@ -1,8 +1,4 @@
-package dev.web;
-
-import static org.junit.jupiter.api.Assertions.fail;
-
-import java.util.List;
+import static org.junit.Assert.fail;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -14,14 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
 import dev.web.model.User;
 import dev.web.model.UserVideo;
 import dev.web.model.Video;
-
 
 class UserControllerTest extends HttpServlet {
 
@@ -130,3 +125,4 @@ class UserControllerTest extends HttpServlet {
 	}
 
 }
+  
