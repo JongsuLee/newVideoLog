@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+// USERVIDEO TABLE
 @Entity
 public class UserVideo {
 	
