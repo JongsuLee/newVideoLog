@@ -11,7 +11,8 @@
 
 영상목록:
 <c:forEach var="video" items="${requestScope.videoLog}">
-	${video.id}<br>
+	${video.id}<br> 
 </c:forEach>
+<jsp:include page="../video/videoList.jsp" flush="true" />
 
 </form>

@@ -4,6 +4,12 @@
 	pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<style>
+	table {
+		border: 1px solid black;
+	}
+</style>
+
 <form name="videoRetrieveForm" method="get" action="retrieve">
 
 	<input type="hidden" name="title" value="${videoRetrieve.title}">
@@ -35,9 +41,13 @@
 					</tr>
 
 					<tr>
-						<td rowspan="7"><img
-							src="images/items/${videoRetrieve.gImage}.gif" border="0"
-							align="center" width="300" /></td>
+						<td rowspan="7">
+						<img src="http://www.tizag.com/pics/htmlT/sunset.gif" /></td>
+						<img src="https://media2.giphy.com/media/f3CtEsJ72j86DIumaJ/200w.webp?cid=ecf05e47e8ctkotgn5zdlz5l8qsu73lzelajs708vjmej2d3&rid=200w.webp&ct=g" /></td>
+						<img src="https://media4.giphy.com/media/MeJgB3yMMwIaHmKD4z/200.webp?cid=ecf05e47bwkah0q4e0327umzwivj0c0ez9851g813g94k89s&rid=200.webp&ct=g" /></td>
+						<img src="https://media2.giphy.com/media/LmxS3CI4Pqk7aPviYO/200w.webp?cid=ecf05e47bwkah0q4e0327umzwivj0c0ez9851g813g94k89s&rid=200w.webp&ct=g" /></td>
+						<img src="https://media0.giphy.com/media/A06UFEx8jxEwU/200.webp?cid=ecf05e47swd5k726wslzjp01eqhc41ddijyh6svscs380pz8&rid=200.webp&ct=g" /></td>
+						<img src="https://media0.giphy.com/media/zgduo4kWRRDVK/200w.webp?cid=ecf05e47swd5k726wslzjp01eqhc41ddijyh6svscs380pz8&rid=200w.webp&ct=g" /></td>
 						<td class="td_title">제목</td>
 						<td class="td_default" colspan="2" style='padding-left: 30px'>
 							${videoRetrieve.title}</td>

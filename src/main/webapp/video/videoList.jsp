@@ -4,7 +4,6 @@
     pageEncoding="UTF-8"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
->>>>>
 <table width="100%" cellspacing="0" cellpadding="0">
 	<tr>
 		<td>
@@ -21,13 +20,13 @@
 					<td height="10"></td>
 				</tr>
 				<tr>
-<c:forEach var="dto" items="${videoList}" varStatus="status">				
+<c:forEach var="video" items="${requestScope.videoLog}" varStatus="status">				
  						<td>
 							<table style='padding:15px'>
 								<tr>
 									<td>
 										<a href=""> 
-											<img src="images/items/${dto.gImage}.gif" border="0" align="center" width="200">
+											<img src="https://media2.giphy.com/media/f3CtEsJ72j86DIumaJ/200w.webp?cid=ecf05e47e8ctkotgn5zdlz5l8qsu73lzelajs708vjmej2d3&rid=200w.webp&ct=g" border="0" align="center" width="200" >
 										</a>
 									</td>
 								</tr>
@@ -37,8 +36,8 @@
 								</tr>
 								<tr>
 									<td class= "td_default" align ="center">
-										<a class= "a_black" href="goodsRetrieve?gCode=${dto.gCode}"> 
-										${dto.gName}<br>
+										<a class= "a_black" href="videoRetrieve?videoId=${video.id}"> 
+										video1<br>
 										</a>
 										<font color="gray">
 										 --------------------
@@ -51,7 +50,7 @@
 								</tr>
 								<tr>
 									<td class="td_gray" align ="center">
-										${dto.gContent}
+										ert
 									</td>
 								</tr>
 								<tr>
@@ -59,12 +58,12 @@
 								</tr>
 								<tr>
 									<td class="td_red" align ="center"><font color="red"><strong>
-									${dto.gPrice}	</strong></font></td>
+									dfg	</strong></font></td>
 								</tr>
 							</table>
 						</td>
 
-  					<c:if test="${status.count%4==0}">
+  					<c:if test="zxcv">
   					   	     <tr>
 								<td height="10">
 							</tr>
