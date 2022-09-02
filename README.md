@@ -64,7 +64,6 @@
 
     1) ModelAndView를 이용해서 화면을 불러왔는데, 해당 이동방식이 request였습니다.
          대부분의 로직에 transaction.begin()을 넣었는데, 로직이 실행되었을 떄, 이미 transaction이 실행되어 있어서 서버에서 충돌이 발생했습니다.
-      
          그래서 if (! transaction.isActive()) transaction.begin()을 통해 충돌을 방지했습니다
          
          
