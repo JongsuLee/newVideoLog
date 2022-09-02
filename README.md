@@ -60,7 +60,20 @@
  
  
 6. 트러블슈팅(에러 내역, 어떻게 해결했는지) :
-      1) 
+
+      1) ModelAndView를 이용해서 화면을 불러왔는데, 해당 이동방식이 request였습니다.
+         대부분의 로직에 transaction.begin()을 넣었는데, 로직이 실행되었을 떄, 이미 transaction이 실행되어 있어서 서버에서 충돌이 발생했습니다.
+      
+         그래서 if (! transaction.isActive()) transaction.begin()을 통해 충돌을 방지했습니다
+         
+         
+      2) JPQL로 원하는 query를 불러오기 위해 EntitiyManager의 createQuery(), setParameter()를 활용했습니다.
+         그런데 JPQL의 문법이 SQL 문법과 다소 차이가 있는 부분이 있어, 블로그에서 상세한 사용법을 찾아 적용하였습니다.
+         
+         
+      3) javascript에서 location.href를 통해 페이지를 이동하는 방식이 redirect라는 것을 몰랐습니다.
+         그래서 requestScope를 통해 테이블의 정보를 전달하던 게 무용지물이 되었습니다.
+         sessionScope에 저장하는 건 불필요하다고 생각해서 Header에 파라미터를 작성하여 전송하였습니다.
 
 
 
