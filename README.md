@@ -10,36 +10,38 @@
   
   
 3. 도메인 용어 정의
-  ※User : 사이트 사용자 정보
+
+    ※User : 사이트 사용자 정보
   
--ID : 유저 아이디
+       -ID : 유저 아이디
 
--PASSWD : 유저 암호
+       -PASSWD : 유저 암호
 
--NAME : 유저 이름
+       -NAME : 유저 이름
+  
+       -GENDER : 성별
 
--GENDER : 성별
-
--AGE : 유저 나이
-
+       -AGE : 유저 나이
+    
 
 
-※Video : 영상
--ID : 영상 고유번호
+    ※Video : 영상
+    
+        -ID : 영상 고유번호
 
--TITLE : 영상 제목
+       -TITLE : 영상 제목
+  
+        -UPLOADER : 영상 업로더 정보
 
--UPLOADER : 영상 업로더 정보
+        -UPLOAD DATE : 업로드 날짜
 
--UPLOAD DATE : 업로드 날짜
+        -READCNT : 조회수
 
--READCNT : 조회수
+       -LIKE : 좋아요 수
 
--LIKE : 좋아요 수
+       -HATE : 싫어요 수
 
--HATE : 싫어요 수
-
--DESCRIPTION : 영상주소 정보
+       -DESCRIPTION : 영상주소 정보
   
   
   
