@@ -13,7 +13,7 @@
     2) 로그인 후 비디오 클릭시 로그인된 user(사용자)의 id와 video(영상)의 id를 다른 테이블에 저장
     3) 
 
-5. ERD : 
+5. ERD : https://miro.com/app/board/uXjVPa1tDi0=/
  
 6. 트러블슈팅(에러 내역, 어떻게 해결했는지) :
       1) 
