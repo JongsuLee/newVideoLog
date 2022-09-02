@@ -46,6 +46,16 @@ public class UserController {
 		return modelAndView;
 	}
 
+	@RequestMapping("/member/logout")
+	public ModelAndView logOut(HttpSession session) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("/");
+		session.removeAttribute("login");
+		
+		return modelAndView;
+	}
+	
 	public User authorize(String userid, String passwd) {
 		String sql = "select u from User u where userid = :userid and passwd = :passwd";
 		TypedQuery<User> query = em.createQuery(sql, User.class);
@@ -91,22 +101,19 @@ public class UserController {
 	/*
 	 * clickVideo: 비디오 클릭시 동작
 	 * 
-	 * 	1. session에서 login정보를 불러옴
-	 * 	2. 해당 비디오의 id값을 videoId로 저장
-	 *  3. videoId로 DB에서 video를 불러옴
-	 *  4. relateVideo에 User와 Video를 넘겨 UserVideo table에 저장
-	 *  5. video의 readCnt를 1씩 증가
-	 *    >> forward:/retrieve
+	 * 1. session에서 login정보를 불러옴 2. 해당 비디오의 id값을 videoId로 저장 3. videoId로 DB에서 video를
+	 * 불러옴 4. relateVideo에 User와 Video를 넘겨 UserVideo table에 저장 5. video의 readCnt를 1씩
+	 * 증가 >> forward:/retrieve
 	 */
 	@RequestMapping("/videoRetrieve")
 	public ModelAndView clickVideo(HttpServletRequest request, HttpServletResponse response,
-							 @SessionAttribute("login") User user, @RequestParam("") long videoId) {
-		
+			@SessionAttribute("login") User user, @RequestParam("videoId") long videoId) {
+
 		ModelAndView modelAndView = new ModelAndView();
 		if (user != null) {
 			Video video = em.find(Video.class, videoId);
-
-			tx.begin();
+			
+			if (! tx.isActive()) tx.begin();
 			relateUserVideo(user, video);
 			increaseReadCnt(video);
 			tx.commit();
@@ -126,83 +133,82 @@ public class UserController {
 		userVideo.setVideoId(video.getId());
 		em.persist(userVideo);
 	}
-	
+
 	private void increaseReadCnt(Video video) {
 		video.setReadcnt(video.getReadcnt() + 1);
 		em.persist(video);
 	}
-	
+
 	/*
-	 *	getMain: 메인 페이지로 이동시 동작
+	 * getMain: 메인 페이지로 이동시 동작
 	 *
-	 * 	1. getVideos에서 모든 video에 대한 레코드들을 불러와 list에 저장
-	 * 	2. request "list"에 list를 저장
-	 * 	 >> main.jsp를 실행
+	 * 1. getVideos에서 모든 video에 대한 레코드들을 불러와 list에 저장 2. request "list"에 list를 저장 >>
+	 * main.jsp를 실행
 	 */
 	@RequestMapping(value = "/")
-	public ModelAndView getMain(HttpServletRequest request) {
-		
+	public ModelAndView getMain(HttpSession session) {
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("main.jsp");
-		
+
 		List<Video> list = getVideos();
-		request.setAttribute("list", list);
-		System.out.println(list);
-		
+		session.setAttribute("list", list);
+
 		return modelAndView;
 	}
-	
+
 	public List<Video> getVideos() {
-		
+
 		TypedQuery<Video> query = em.createQuery("select v from Video v order by v.id desc", Video.class);
-		
+
 		return query.getResultList();
 	}
-	
+
 	/*
 	 * like/hate: like / hate 버튼 클릭시 동작
 	 * 
-	 * 	1. request에서 video에 대한 정보를 받기
-	 * 	2. increaseLike/Hate에 video를 넘기기
-	 *  3. video의 like/hate을 1씩 증감
+	 * 1. request에서 video에 대한 정보를 받기 2. increaseLike/Hate에 video를 넘기기 3. video의
+	 * like/hate을 1씩 증감
 	 */
-	
+
 	@RequestMapping("/like")
-	public ModelAndView like(HttpServletRequest request) {
-		
+	public ModelAndView like(HttpServletRequest request, @RequestParam("videoId") long videoId) {
+
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("videoRetrieve.jsp");
-		
-		Video video = (Video) request.getAttribute("video");
-		increaseLike(em.find(Video.class, video.getId()));
-		
+		modelAndView.setViewName("videoRetrieve?videoId=" + videoId);
+
+		Video video = em.find(Video.class, videoId);
+		increaseLike(video);
+
 		return modelAndView;
 	}
-	
+
 	public void increaseLike(Video video) {
 		
+		if (! tx.isActive()) tx.begin();
 		video.setLike(video.getLike() + 1);
 		em.persist(video);
 		tx.commit();
 	}
-	
+
 	@RequestMapping("/hate")
-	public ModelAndView hate(HttpServletRequest request) {
-		
+	public ModelAndView hate(HttpServletRequest request, @RequestParam("videoId") long videoId) {
+
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("videoRetrieve.jsp");
-		
-		Video video = (Video) request.getAttribute("video");
-		increaseLike(em.find(Video.class, video.getId()));
-		
+		modelAndView.setViewName("videoRetrieve?videoId=" + videoId);
+
+		Video video = em.find(Video.class, videoId);
+		increaseHate(video);
+
 		return modelAndView;
 	}
-	
+
 	public void increaseHate(Video video) {
-		
+
+		if (! tx.isActive()) tx.begin();
 		video.setHate(video.getHate() + 1);
 		em.persist(video);
 		tx.commit();
 	}
-	
+
 }

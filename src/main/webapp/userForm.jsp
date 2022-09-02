@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h1>회원상세 페이지</h1>
-	<a href="../main.jsp">Home</a>&nbsp;&nbsp;
+	<a href="/VideoLog/main.jsp">Home</a>&nbsp;&nbsp;
 	<hr>
 	<jsp:include page="member/mypage.jsp" flush="true" />
 </body>
