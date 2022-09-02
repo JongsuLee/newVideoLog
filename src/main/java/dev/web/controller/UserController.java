@@ -40,7 +40,6 @@ public class UserController {
 			HttpSession session = request.getSession();
 			session.setAttribute("login", user);
 		} catch (Exception e) {
-			// �븘�씠�뵒 �샊�� 鍮꾨�踰덊샇媛� 留욎� �븡�� 寃쎌슦 �삁�쇅諛쒖깮
 			request.setAttribute("error", "�븘�씠�뵒�� 鍮꾨�踰덊샇瑜� �떎�떆 �솗�씤�빐二쇱떗�떆�삤");
 		}
 
@@ -56,14 +55,6 @@ public class UserController {
 		return query.getSingleResult();
 	}
 
-	/*
-	 * getProfile: �봽濡쒗븘 �럹�씠吏�濡� �씠�룞�떆 �룞�옉
-	 *
-	 * 1. session�뿉 �엳�뒗 login �젙蹂대�� 諛쏄린 2. listVideo瑜� �넻�빐 UserVideo table�뿉�꽌
-	 * �빐�떦 �쑀��媛� �룷�븿�맂 �젅肄붾뱶�뱾�쓣 遺덈윭�� list�뿉 ���옣 3. getVideos瑜� �넻�빐 Video
-	 * table�뿉�꽌 �빐�떦 list媛� �룷�븿�맂 video�뱾�쓣 遺덈윭�� listVideo�뿉 ���옣 3. request
-	 * "videoLog"�뿉 listVideo瑜� ���옣 >> profile.jsp瑜� �떎�뻾
-	 */
 	@RequestMapping("/profile")
 	public ModelAndView getProfile(HttpServletRequest request, @SessionAttribute("login") User user) {
 
@@ -98,25 +89,35 @@ public class UserController {
 	}
 
 	/*
-	 * clickVideo
+	 * clickVideo: 비디오 클릭시 동작
+	 * 
+	 * 	1. session에서 login정보를 불러옴
+	 * 	2. 해당 비디오의 id값을 videoId로 저장
+	 *  3. videoId로 DB에서 video를 불러옴
+	 *  4. relateVideo에 User와 Video를 넘겨 UserVideo table에 저장
+	 *  5. video의 readCnt를 1씩 증가
+	 *    >> forward:/retrieve
 	 */
-
-	public String clickVideo(HttpServletRequest request, HttpServletResponse response,
-			@SessionAttribute("login") User user, @RequestParam("") long videoId) {
-
+	@RequestMapping("/videoRetrieve")
+	public ModelAndView clickVideo(HttpServletRequest request, HttpServletResponse response,
+							 @SessionAttribute("login") User user, @RequestParam("") long videoId) {
+		
+		ModelAndView modelAndView = new ModelAndView();
 		if (user != null) {
 			Video video = em.find(Video.class, videoId);
 
 			tx.begin();
 			relateUserVideo(user, video);
-			video.setReadcnt(video.getReadcnt() + 1);
-			em.persist(video);
+			increaseReadCnt(video);
 			tx.commit();
 			video = em.find(Video.class, videoId);
 			request.setAttribute("video", video);
+			modelAndView.setViewName("videoRetrieve.jsp");
+		} else {
+			modelAndView.setViewName("videoRetrieve.jsp");
+			request.setAttribute("error", "로그인 정보가 필요합니다");
 		}
-
-		return "forward:/retrieve";
+		return modelAndView;
 	}
 
 	private void relateUserVideo(User user, Video video) {
@@ -125,5 +126,83 @@ public class UserController {
 		userVideo.setVideoId(video.getId());
 		em.persist(userVideo);
 	}
-
+	
+	private void increaseReadCnt(Video video) {
+		video.setReadcnt(video.getReadcnt() + 1);
+		em.persist(video);
+	}
+	
+	/*
+	 *	getMain: 메인 페이지로 이동시 동작
+	 *
+	 * 	1. getVideos에서 모든 video에 대한 레코드들을 불러와 list에 저장
+	 * 	2. request "list"에 list를 저장
+	 * 	 >> main.jsp를 실행
+	 */
+	@RequestMapping(value = "/")
+	public ModelAndView getMain(HttpServletRequest request) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("main.jsp");
+		
+		List<Video> list = getVideos();
+		request.setAttribute("list", list);
+		System.out.println(list);
+		
+		return modelAndView;
+	}
+	
+	public List<Video> getVideos() {
+		
+		TypedQuery<Video> query = em.createQuery("select v from Video v order by v.id desc", Video.class);
+		
+		return query.getResultList();
+	}
+	
+	/*
+	 * like/hate: like / hate 버튼 클릭시 동작
+	 * 
+	 * 	1. request에서 video에 대한 정보를 받기
+	 * 	2. increaseLike/Hate에 video를 넘기기
+	 *  3. video의 like/hate을 1씩 증감
+	 */
+	
+	@RequestMapping("/like")
+	public ModelAndView like(HttpServletRequest request) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("videoRetrieve.jsp");
+		
+		Video video = (Video) request.getAttribute("video");
+		increaseLike(em.find(Video.class, video.getId()));
+		
+		return modelAndView;
+	}
+	
+	public void increaseLike(Video video) {
+		
+		video.setLike(video.getLike() + 1);
+		em.persist(video);
+		tx.commit();
+	}
+	
+	@RequestMapping("/hate")
+	public ModelAndView hate(HttpServletRequest request) {
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("videoRetrieve.jsp");
+		
+		Video video = (Video) request.getAttribute("video");
+		increaseLike(em.find(Video.class, video.getId()));
+		
+		return modelAndView;
+	}
+	
+	public void increaseHate(Video video) {
+		
+		video.setHate(video.getHate() + 1);
+		em.persist(video);
+		tx.commit();
+	}
+	
 }
