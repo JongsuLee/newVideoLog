@@ -10,3 +10,6 @@
 	<h2>Video List</h2>
 	<jsp:include page="/video/videoList.jsp" flush="true" />
 </c:if>
+<c:forEach var="video" items="${requestScope.list}">
+	${video.id}<br>
+</c:forEach>
